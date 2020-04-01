@@ -6,7 +6,7 @@ use super::grid_position::GridPos;
 pub struct Snake {
 	pub head: GridPos,
 	dir: Direction,
-	vel: i16,
+	vel: u8,
 }
 
 impl Snake {
@@ -42,5 +42,11 @@ impl Snake {
 		}
 
 		self.dir = new_dir
+	}
+}
+
+impl super::HasPositions for Snake {
+	fn get_positions(&self) -> Box<dyn Iterator<Item = GridPos>> {
+		Box::new(vec!(self.head).into_iter())
 	}
 }

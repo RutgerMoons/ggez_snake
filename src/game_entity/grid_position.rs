@@ -2,12 +2,12 @@
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct GridPos {
-	pub x: i16,
-	pub y: i16,
+	pub x: u8,
+	pub y: u8,
 }
 
-impl From<(i16, i16)> for GridPos {
-	fn from(pos: (i16, i16)) -> Self {
+impl From<(u8, u8)> for GridPos {
+	fn from(pos: (u8, u8)) -> Self {
 		GridPos { x: pos.0, y: pos.1 }
 	}
 }
