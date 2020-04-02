@@ -57,7 +57,7 @@ impl event::EventHandler for GameState {
 		}
 		
 		self.last_update = n;
-		//self.snake.update();
+		self.grid.update();
 		Ok(())
 	}
 
@@ -70,7 +70,7 @@ impl event::EventHandler for GameState {
 
 	fn key_down_event(&mut self, _ctx: &mut Context, keyCode: KeyCode, _keyMods: KeyMods, _repeat: bool) {
 		if let Some(dir) = types::Direction::from_key_code(keyCode) {
-			//self.snake.change_direction(dir);
+			self.grid.change_direction(dir);
 		}
 	}
 }

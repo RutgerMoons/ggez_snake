@@ -1,5 +1,4 @@
-use crate::game_entity::{grid_position::GridPos,snake};
-use snake::Snake;
+use crate::game_entity::{grid_position::GridPos,snake::Snake,types::Direction};
 use super::HasPositions;
 
 pub struct Grid {
@@ -24,5 +23,13 @@ impl Grid {
 
   pub fn get_snake_positions(&self) -> Box<dyn Iterator<Item = GridPos>> {
     self.snake.get_positions()
+  }
+
+  pub fn update(&mut self) {
+    self.snake.update();
+  }
+
+  pub fn change_direction(&mut self, new_dir: Direction) {
+    self.snake.change_direction(new_dir);
   }
 }
