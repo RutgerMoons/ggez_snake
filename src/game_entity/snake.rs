@@ -6,6 +6,7 @@ use super::grid_position::GridPos;
 pub struct Snake {
 	pub head: GridPos,
 	dir: Direction,
+	new_dir: Direction,
 	vel: u8,
 }
 
@@ -14,15 +15,13 @@ impl Snake {
 		Self {
 			head: head_pos,
 			dir: Direction::Right,
+			new_dir: Direction::Right,
 			vel: 1,
 		}
 	}
 
-	pub fn default() -> Self {
-		Self::new((5,5).into())
-	}
-
 	pub fn update(&mut self) {
+		self.dir = self.new_dir;
 		self.move_snake();
 	}
 
@@ -41,7 +40,7 @@ impl Snake {
 			return;
 		}
 
-		self.dir = new_dir
+		self.new_dir = new_dir
 	}
 }
 
