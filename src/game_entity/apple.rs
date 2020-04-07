@@ -1,5 +1,6 @@
 use super::grid_position::GridPos;
 
+#[derive(PartialEq)]
 pub enum FoodState {
   Fresh,
   Eaten,
@@ -15,9 +16,9 @@ impl Apple {
     Self { pos: pos, state: FoodState::Fresh }
   }
 
-  pub fn onEat(fresh: & Apple) -> Self {
-    match fresh.state {
-      FoodState::Fresh => Self { state: FoodState::Eaten, pos: fresh.pos },
+  pub fn on_eat(self: &Self) -> Self {
+    match self.state {
+      FoodState::Fresh => Self { state: FoodState::Eaten, pos: self.pos },
       FoodState::Eaten => panic!("Can't eat apple twice"),
     }
   }

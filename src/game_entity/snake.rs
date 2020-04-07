@@ -42,6 +42,14 @@ impl Snake {
 
 		self.new_dir = new_dir
 	}
+
+  pub fn get_head_pos(self: &Self) -> GridPos {
+    self.head
+	}
+	
+	pub fn on_eat_apple(self: &mut Self) {
+
+	}
 }
 
 impl super::HasPositions for Snake {

@@ -1,4 +1,4 @@
-use crate::game_entity::{grid_position::GridPos,snake::Snake,grid::Grid};
+use crate::game_entity::{grid_position::GridPos,snake::Snake,grid::Grid,apple::*};
 use super::renderer::Renderable;
 use super::color_palette::ColorPalette;
 use ggez::{Context,graphics};
@@ -22,7 +22,7 @@ impl GridRenderer {
 
 impl GridRenderer {
   pub fn draw(&self, _ctx: &mut Context, grid: &Grid, palette: &ColorPalette) {
-    self.draw_apple(_ctx, grid, palette.APPLE_COLOR);
+    self.draw_apple(_ctx, grid.get_apple(), palette.APPLE_COLOR);
     self.draw_snake(_ctx, grid, palette.SNAKE_HEAD, palette.SNAKE_BODY);  
   }
 
@@ -33,9 +33,12 @@ impl GridRenderer {
     }
   }
 
-  fn draw_apple(&self, _ctx: &mut Context, grid: &Grid, apple_coler: Color) {
-    let pos = grid.get_apple_pos();
-    pos.draw(_ctx, apple_coler, self.grid_cell_size);
+  fn draw_apple(&self, _ctx: &mut Context, apple: &Apple, apple_coler: Color) {
+    if apple.state == FoodState::Eaten {
+      return;
+    }
+
+    apple.pos.draw(_ctx, apple_coler, self.grid_cell_size);
   }
 }
 
