@@ -1,10 +1,11 @@
-use crate::game_entity::{grid_position::GridPos,snake::Snake,types::Direction};
+use crate::game_entity::{grid_position::GridPos,snake::Snake,types::Direction,apple::Apple};
 use super::HasPositions;
 
 pub struct Grid {
   nb_rows: u8,
   nb_cols: u8,
   snake: Snake,
+  apple: Apple,
 }
 
 impl Grid {
@@ -14,6 +15,7 @@ impl Grid {
       nb_rows: rows,
       nb_cols: cols,
       snake: Snake::new(start_pos),
+      apple: Apple::spawn( (1,1).into() /* self.get_free_positions() */ ),
     }
   }
 
@@ -23,6 +25,10 @@ impl Grid {
 
   pub fn get_snake_positions(&self) -> Box<dyn Iterator<Item = GridPos>> {
     self.snake.get_positions()
+  }
+
+  pub fn get_apple_pos(&self) -> GridPos {
+    self.apple.pos
   }
 
   pub fn update(&mut self) {

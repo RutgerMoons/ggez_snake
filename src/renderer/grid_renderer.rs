@@ -22,6 +22,7 @@ impl GridRenderer {
 
 impl GridRenderer {
   pub fn draw(&self, _ctx: &mut Context, grid: &Grid, palette: &ColorPalette) {
+    self.draw_apple(_ctx, grid, palette.APPLE_COLOR);
     self.draw_snake(_ctx, grid, palette.SNAKE_HEAD, palette.SNAKE_BODY);  
   }
 
@@ -30,6 +31,11 @@ impl GridRenderer {
     for pos in positions {
       pos.draw(_ctx, head_color, self.grid_cell_size);
     }
+  }
+
+  fn draw_apple(&self, _ctx: &mut Context, grid: &Grid, apple_coler: Color) {
+    let pos = grid.get_apple_pos();
+    pos.draw(_ctx, apple_coler, self.grid_cell_size);
   }
 }
 
