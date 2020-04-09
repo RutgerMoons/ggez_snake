@@ -1,4 +1,4 @@
-use crate::game_entity::{grid_position::GridPos,snake::Snake,types::Direction,apple::Apple};
+use crate::game_entity::{grid_position::GridPos,snake::Snake,types::Direction,apple::Apple,wall::Wall};
 use super::HasPositions;
 
 pub struct Grid {
@@ -6,6 +6,7 @@ pub struct Grid {
   nb_cols: u8,
   snake: Snake,
   apple: Apple,
+  pub walls: Vec<Wall>,
 }
 
 impl Grid {
@@ -15,14 +16,30 @@ impl Grid {
       nb_rows: rows,
       nb_cols: cols,
       snake: Snake::new(start_pos),
-      apple: Apple::spawn((1,1).into())
+      apple: Apple::spawn((1,1).into()),
+      walls: Vec::new(),
     };
+    new_grid.walls = new_grid.get_walls();
     new_grid.apple = Apple::spawn(new_grid.get_random_free_position());
     new_grid
   }
 
   pub fn get_dimensions(&self) -> (u8, u8) {
     (self.nb_rows, self.nb_cols)
+  }
+
+  fn get_walls(&self) -> Vec<Wall> {
+    let mut walls : Vec<Wall> = Vec::new();
+    for i in 0..self.nb_rows {
+      walls.push(Wall { pos: GridPos {x: i, y: 0}});
+      walls.push(Wall { pos: GridPos {x: i, y: self.nb_cols as u8 - 1}});
+    }
+
+    for i in 1..self.nb_cols - 1 {
+      walls.push(Wall { pos: GridPos {x: 0, y: i}});
+      walls.push(Wall { pos: GridPos {x: self.nb_rows as u8 - 1, y: i}});
+    }
+    walls
   }
 
   pub fn get_snake_positions(&self) -> Box<dyn Iterator<Item = GridPos>> {
@@ -49,8 +66,16 @@ impl Grid {
   }
 
   pub fn update(&mut self) {
+    // incorrect for the tail, but nevermind ATM
+    let free = self.get_free_positions();
     self.snake.update();
-    if self.snake.get_head_pos() == self.apple.pos {
+    let snake_head_pos = self.snake.get_head_pos();
+
+    if !free.contains(&snake_head_pos) {
+      panic!("Bump");
+    }
+
+    if snake_head_pos == self.apple.pos {
       self.snake.on_eat_apple();
       self.apple = self.apple.on_eat();
       self.on_eat_apple();
@@ -62,7 +87,12 @@ impl Grid {
   }
 
   fn get_free_positions(self: &Self) -> Vec<GridPos> {
-    let used_pos : Vec<GridPos> = self.get_snake_positions().collect();
+    let mut used_pos : Vec<GridPos> = self.get_snake_positions().collect();
+    let wall_pos : Vec<GridPos> = self.walls.iter()
+                                            .map(|w| w.pos)
+                                            .collect::<Vec<GridPos>>();
+                    
+    used_pos.extend(wall_pos);
     let mut free_pos : Vec<GridPos> = Vec::with_capacity(self.nb_rows as usize * self.nb_cols as usize);
     for i in 0..self.nb_rows {
       for j in 0..self.nb_cols {

@@ -5,6 +5,7 @@ pub struct ColorPalette {
 	pub SNAKE_HEAD: Color,
 	pub SNAKE_BODY: Color,
 	pub APPLE_COLOR: Color,
+	pub wall_color: Color,
 }
 
 impl ColorPalette {
@@ -14,6 +15,7 @@ impl ColorPalette {
 			SNAKE_HEAD : Color::from_rgb(247, 167, 27),
 			SNAKE_BODY : Color::from_rgb(255, 119, 51),
 			APPLE_COLOR: Color::from_rgb(200, 12, 12),
+			wall_color: Color::from_rgb(0, 0, 255),
 		}
 	}
 }
